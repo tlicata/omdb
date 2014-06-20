@@ -2,6 +2,21 @@
 <html>
   <head>
     <title>Movie Search - Powered by OMDB</title>
+    <script type="text/template" class="details">
+      <h2><%- Title %> (<%- Year %>)</h2>
+      <% if (Poster !== "" && Poster !== "N/A") { %>
+        <img src="<%= Poster %>">
+      <% } %>
+      <p><%- Plot %></p>
+      <span>Rated: <%- Rated %></span>
+      <div>
+        <ul>
+          <li>Metascore: <%- Metascore %></li>
+          <li>IMDB Rating: <%- imdbRating %></li>
+          <li>IMDB Votes: <%- imdbVotes %></li>
+        </ul>
+      </div>
+     </script>
   </head>
   <body>
     <h1>Movie Search</h1>
@@ -11,6 +26,7 @@
     </form>
     <ol id="search-results"></ol>
     <p id="error-message"></p>
+    <div id="movie-details"></div>
     <script type="text/javascript" src="js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="js/lib/underscore.min.js"></script>
     <script type="text/javascript" src="js/script.js"></script>

@@ -1,9 +1,11 @@
 var OMDB_URL = "http://www.omdbapi.com/";
 
+var detailsDOM = $("#movie-details");
 var errorDOM = $("#error-message");
 var resultsDOM = $("#search-results");
 
 var clearPreviousResults = function () {
+    detailsDOM.empty();
     errorDOM.empty();
     resultsDOM.empty();
 };
@@ -24,8 +26,9 @@ var renderMovieResults = function (results) {
     });
 };
 
+var detailsTemplate = _.template($("script.details").html());
 var renderDetails = function (details) {
-    console.log("renderDetails", details);
+    detailsDOM.html(detailsTemplate(details));
 };
 
 var renderError = function (message) {
@@ -35,7 +38,7 @@ var renderError = function (message) {
 
 var lookupMovieId = function (id) {
     $.ajax({
-        data: {"i": id},
+        data: {"i": id, "plot": "full"},
         dataType: "jsonp",
         url: OMDB_URL,
         success: renderDetails
