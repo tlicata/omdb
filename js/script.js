@@ -15,7 +15,6 @@ var renderMovieResults = function (results) {
         renderError(results.Error);
         return;
     }
-    clearPreviousResults();
     $.each(results.Search, function (index, movie) {
         var text = movie.Title + " (" + movie.Year + ")";
         var url = "http://www.imdb.com/title/" + movie.imdbID;
@@ -32,7 +31,6 @@ var renderDetails = function (details) {
 };
 
 var renderError = function (message) {
-    clearPreviousResults();
     errorDOM.append(message || "Oops, an error occurred");
 };
 
@@ -45,6 +43,7 @@ var lookupMovieId = function (id) {
     });
 };
 var searchForMovie = function (searchText) {
+    clearPreviousResults();
     $.ajax({
         data: {"s": searchText},
         dataType: "jsonp",
