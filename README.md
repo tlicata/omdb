@@ -1,4 +1,4 @@
-# Movie Search - Powered by OMDB
+# Movie Search
 
 A single page app that displays movie info. It uses the 
 API from http://www.omdbapi.com/ to search for and display 
