@@ -58,10 +58,54 @@ resultsDOM.on("click", "a", function (event) {
     event.preventDefault();
     var id = $(this).data("imdbID");
     lookupMovieId(id);
+    pageHistory.addState({id: id});
 });
 
 $("#movie-search-form").on("submit", function (event) {
     event.preventDefault();
     var query = $("#movie-search-query").val();
     searchForMovie(query);
+    pageHistory.newState({query: query});
 });
+
+// History Management
+var pageHistory = (function () {
+
+    // Determine if browser has HTML5 history available.
+    var hasHistory = typeof window.history !== "undefined";
+
+    // Read state at page load and initialize the UI.
+    // Also, respond to history changes (e.g., back
+    // button) by updating the UI to match the state.
+    var updateState = function (state) {
+        if (state) {
+            if (state.query) {
+                searchForMovie(state.query);
+            }
+            if (state.id) {
+                lookupMovieId(state.id);
+            }
+        }
+    };
+    if (hasHistory) {
+        updateState(history.state);
+        window.onpopstate = function (event) {
+            updateState(event.state);
+        };
+    }
+
+    // Functions for modifying state. newState() sets
+    // a completely new state while addState() builds
+    // off the previous state.
+    var newState = function (state) {
+        history.pushState(state, "", "#"+$.param(state));
+    };
+    var addState = function (state) {
+        newState($.extend({}, history.state, state));
+    };
+    var dummy = function () {};
+    return {
+        addState: hasHistory ? addState : dummy,
+        newState: hasHistory ? newState : dummy
+    };
+})();
