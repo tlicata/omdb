@@ -10,6 +10,7 @@ var clearPreviousResults = function () {
     resultsDOM.empty();
 };
 
+// Rendering
 var renderMovieResults = function (results) {
     if (results.Response === "False" || results.Error) {
         renderError(results.Error);
@@ -34,6 +35,7 @@ var renderError = function (message) {
     errorDOM.append(message || "Oops, an error occurred");
 };
 
+// AJAX Requests
 var lookupMovieId = function (id) {
     $.ajax({
         data: {"i": id, "plot": "full"},
@@ -53,13 +55,13 @@ var searchForMovie = function (searchText) {
     });
 };
 
+// Event Handling
 resultsDOM.on("click", "a", function (event) {
     event.preventDefault();
     var id = $(this).data("imdbID");
     lookupMovieId(id);
     pageHistory.addState({id: id});
 });
-
 $("#movie-search-form").on("submit", function (event) {
     event.preventDefault();
     var query = $("#movie-search-query").val();
