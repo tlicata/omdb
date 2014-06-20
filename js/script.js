@@ -1,9 +1,26 @@
-var renderMovieResults = function (results) {
-    console.log("rendering results", results);
+var errorDOM = $("#error-message");
+var resultsDOM = $("#search-results");
+
+var clearPreviousResults = function () {
+    errorDOM.empty();
+    resultsDOM.empty();
 };
 
-var renderError = function () {
-    console.log("oops, an error occurred");
+var renderMovieResults = function (results) {
+    if (results.Response === "False" || results.Error) {
+        renderError(results.Error);
+        return;
+    }
+    clearPreviousResults();
+    $.each(results.Search, function (index, movie) {
+        var text = movie.Title + " (" + movie.Year + ")";
+        resultsDOM.append($("<li/>").text(text));
+    });
+};
+
+var renderError = function (message) {
+    clearPreviousResults();
+    errorDOM.append(message || "Oops, an error occurred");
 };
 
 var searchForMovie = function (searchText) {
