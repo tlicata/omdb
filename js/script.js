@@ -45,6 +45,7 @@ var renderError = function (message) {
 
 // AJAX Requests
 var lookupMovieId = function (id) {
+    detailsDOM.html("loading...");
     $.ajax({
         data: {"i": id, "plot": "full"},
         dataType: "jsonp",
