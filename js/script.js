@@ -88,10 +88,27 @@ var pageHistory = (function () {
             }
         }
     };
+    var getStateFromHash = function () {
+        var state = {};
+        var hash = window.location.hash.substr(1);
+        if (hash.length > 0) {
+            var pairs = hash.split("&");
+            $.each(pairs, function (index, value) {
+                var keyVal = value.split("=");
+                var key = keyVal[0];
+                var val = keyVal[1];
+                state[key] = val;
+            });
+        }
+        return state;
+    };
+    var getCurrentState = function () {
+        return history.state || getStateFromHash();
+    };
     if (hasHistory) {
-        updateState(history.state);
+        updateState(getCurrentState());
         window.onpopstate = function (event) {
-            updateState(event.state);
+            updateState(event.state || getStateFromHash());
         };
     }
 
@@ -102,7 +119,7 @@ var pageHistory = (function () {
         history.pushState(state, "", "#"+$.param(state));
     };
     var addState = function (state) {
-        newState($.extend({}, history.state, state));
+        newState($.extend({}, getCurrentState(), state));
     };
     var dummy = function () {};
     return {
