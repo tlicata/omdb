@@ -4,10 +4,16 @@ var detailsDOM = $("#movie-details");
 var errorDOM = $("#error-message");
 var resultsDOM = $("#search-results");
 
-var clearPreviousResults = function () {
+var clearDetails = function () {
     detailsDOM.empty();
+};
+var clearSearchResults = function () {
     errorDOM.empty();
     resultsDOM.empty();
+};
+var clearAll = function () {
+    clearDetails();
+    clearSearchResults();
 };
 
 // Rendering
@@ -45,7 +51,7 @@ var lookupMovieId = function (id) {
     });
 };
 var searchForMovie = function (searchText) {
-    clearPreviousResults();
+    clearAll();
     $.ajax({
         data: {"s": searchText},
         dataType: "jsonp",
@@ -82,9 +88,13 @@ var pageHistory = (function () {
         if (state) {
             if (state.query) {
                 searchForMovie(state.query);
+            } else {
+                clearSearchResults();
             }
             if (state.id) {
                 lookupMovieId(state.id);
+            } else {
+                clearDetails();
             }
         }
     };
