@@ -4,6 +4,8 @@ var detailsDOM = $("#movie-details");
 var errorDOM = $("#error-message");
 var resultsDOM = $("#search-results");
 
+var searchBox = $("#movie-search-query");
+
 var clearDetails = function () {
     detailsDOM.empty();
 };
@@ -70,7 +72,7 @@ resultsDOM.on("click", "a", function (event) {
 });
 $("#movie-search-form").on("submit", function (event) {
     event.preventDefault();
-    var query = $("#movie-search-query").val();
+    var query = searchBox.val();
     searchForMovie(query);
     pageHistory.newState({query: query});
 });
@@ -87,9 +89,11 @@ var pageHistory = (function () {
     var updateState = function (state) {
         if (state) {
             if (state.query) {
+                searchBox.val(state.query);
                 searchForMovie(state.query);
             } else {
                 clearSearchResults();
+                searchBox.val("");
             }
             if (state.id) {
                 lookupMovieId(state.id);
